@@ -1,0 +1,18 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        
+        {
+            "name": "Python: Streamlit",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "/home/gabriel/anaconda3/envs/teoria/bin/streamlit", // Atualize conforme necessário
+            "args": [
+                "run",
+                "/home/gabriel/Área de Trabalho/trabalho_teoria/app/frontend/app.py"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ]
+}

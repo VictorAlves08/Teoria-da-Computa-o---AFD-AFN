@@ -4,45 +4,38 @@ from typing import List, Dict
 import graphviz
 
 def afn_to_afd(afn: AFN) -> AFD:
-        new_states = []
-        new_transitions = {}
-        state_map = {}
-        initial_state = tuple([afn.get_initial_state()])
-        state_queue = [initial_state]
-        final_states = []
+    new_states = []
+    new_transitions = {}
+    state_map = {}
+    initial_state = tuple([afn.get_initial_state()])
+    state_queue = [initial_state]
+    final_states = []
 
-        while state_queue:
-            current_state = state_queue.pop(0)
-            current_state_str = ','.join(current_state)
+    while state_queue:
+        current_state = state_queue.pop(0)
+        current_state_str = ','.join(current_state)
 
-            if current_state_str not in state_map:
-                state_map[current_state_str] = current_state
-                new_states.append(current_state_str)
-                new_transitions[current_state_str] = {}
+        if current_state_str not in state_map:
+            state_map[current_state_str] = current_state
+            new_states.append(current_state_str)
+            new_transitions[current_state_str] = {}
 
-                if any(s in afn.get_final_states() for s in current_state):
-                    final_states.append(current_state_str)
+            if any(s in afn.get_final_states() for s in current_state):
+                final_states.append(current_state_str)
 
-                for symbol in afn.get_alphabet():
-                    next_states = set()
-                    for state in current_state:
-                        next_states.update(afn.get_next_states(symbol))
+            for symbol in afn.get_alphabet():
+                next_states = set()
+                for state in current_state:
+                    next_states.update(afn.get_next_states(state, symbol))
 
-                    next_state_tuple = tuple(next_states)
-                    if next_state_tuple:
-                        next_state_str = ','.join(next_state_tuple)
-                        new_transitions[current_state_str][symbol] = next_state_str
-                        if next_state_tuple not in state_map:
-                            state_queue.append(next_state_tuple)
+                next_state_tuple = tuple(next_states)
+                if next_state_tuple:
+                    next_state_str = ','.join(next_state_tuple)
+                    new_transitions[current_state_str][symbol] = next_state_str
+                    if next_state_tuple not in state_map:
+                        state_queue.append(next_state_tuple)
 
-        return AFD(new_states, afn.get_alphabet(), ','.join(initial_state), final_states, new_transitions)
-
-
-# def check_equivalence(afn, afd, test_words) -> bool:
-#     for word in test_words:
-#         if afn.run(word) != afd.run(word):
-#             return False
-#     return True
+    return AFD(new_states, afn.get_alphabet(), ','.join(initial_state), final_states, new_transitions)
 
 def minimize_afd(afd: AFD) -> AFD:
     P = [set(afd.get_final_states()), set(afd.get_states()) - set(afd.get_final_states())]
@@ -128,5 +121,15 @@ def check_equivalence(automaton1, automaton2, test_words: List[str]) -> bool:
             return False
     return True
 
-
-
+def parse_transitions(transitions_input):
+    transitions = {}
+    for line in transitions_input.split("\n"):
+        parts = line.split("=")
+        if len(parts) == 2:
+            state_symbol, result = parts[0].strip(), parts[1].strip()
+            state, symbol = state_symbol.split(',')
+            targets = result.split('|')
+            if state.strip() not in transitions:
+                transitions[state.strip()] = {}
+            transitions[state.strip()][symbol.strip()] = targets
+    return transitions
