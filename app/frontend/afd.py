@@ -17,6 +17,15 @@ class AFD(AutomatoABC):
         self.transitions = transitions
         self.current_state = initial_state
 
+    def accepts(self, word):
+        current_state = self.initial_state
+        for symbol in word:
+            if (current_state, symbol) in self.transitions:
+                current_state = self.transitions[(current_state, symbol)]
+            else:
+                return False
+        return current_state in self.final_states
+
     def run(self, input_string: str) -> bool:
         self.set_current_state(self.get_initial_state())
         for symbol in input_string:

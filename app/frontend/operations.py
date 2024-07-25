@@ -2,6 +2,7 @@ from afn import AFN
 from afd import AFD
 from typing import List, Dict
 import graphviz
+from graphviz import Digraph
 
 def afn_to_afd(afn: AFN) -> AFD:
     new_states = []
@@ -87,7 +88,7 @@ def afd_to_afn(afd: AFD) -> AFN:
         new_transitions[state] = {symbol: [target] for symbol, target in transitions.items()}
     return AFN(afd.get_states(), afd.get_alphabet(), afd.get_initial_state(), afd.get_final_states(), new_transitions)
 
-def render_automaton(automaton):
+def render_automatonq(automaton):
     dot = graphviz.Digraph(name="Automaton")
     dot.attr(rankdir='LR', labelloc='t')
 
@@ -112,6 +113,31 @@ def render_automaton(automaton):
                     dot.edge(state, target, label=symbol)
             else:  # Handling AFD
                 dot.edge(state, transitions[symbol], label=symbol)
+
+    return dot
+
+def render_automato(automaton):
+    dot = Digraph()
+    dot.attr(rankdir='LR')
+    dot.attr('node', shape='circle')
+
+    if isinstance(automaton, AFD):
+        dot.attr(label='Tipo: AFD')
+    else:
+        dot.attr(label='Tipo: AFN')
+
+    dot.node('->', shape='none', width='0', height='0', label='', fontcolor='blue')
+    dot.edge('->', automaton.get_initial_state())
+
+    for state in automaton.get_final_states():
+        dot.node(state, shape='doublecircle', fontsize='19', fontcolor='red')
+    for state, transitions in automaton.get_transitions().items():
+        for symbol, targets in transitions.items():
+            if isinstance(targets, list):  # Handling AFN
+                for target in targets:
+                    dot.edge(state, target, label=symbol)
+            else:  # Handling AFD
+                dot.edge(state, targets, label=symbol)
 
     return dot
 

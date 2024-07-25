@@ -17,6 +17,19 @@ class AFN(AutomatoABC):
         self.transitions = transitions
         self.current_states = [initial_state]  # AFN pode estar em múltiplos estados ao mesmo tempo
 
+    def accepts(self, word):
+        def _dfs(state, word):
+            if not word:
+                return state in self.final_states
+            symbol = word[0]
+            next_states = self.transitions.get((state, symbol), [])
+            for next_state in next_states:
+                if _dfs(next_state, word[1:]):
+                    return True
+            return False
+        
+        return _dfs(self.initial_state, word)
+
     def run(self, input_string: str) -> bool:
         self.set_current_state([self.get_initial_state()])
         for symbol in input_string:
