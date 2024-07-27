@@ -5,10 +5,10 @@ Este projeto implementa um sistema para manipular Autômatos Finitos Determinís
 ## Funcionalidades
 
 - Recebe um AFN como entrada
-- Converte o AFN em AFD
+- Converte um AFN em AFD
 - Simula a aceitação de palavras no AFD e AFN
 - Demonstra a equivalência entre AFN e AFD
-- Minimiza AFDs
+- Minimização de AFDs
 
 ## Estrutura do Projeto
 
@@ -28,11 +28,15 @@ Este projeto implementa um sistema para manipular Autômatos Finitos Determinís
     pip install -r requirements.txt
     ```
 
-2. Execute o script principal:
+2. Acesse o path do frontend:
     ```
-    python app/backend/scripts/main.py
+    cd {seuPath}\app\frontend
     ```
-
-## Como Testar
-
-Execute os testes unitários:
+3. Execute o arquivo app.py:
+    ```
+    streamlit run app.py
+    ```
+4. Seu projeto estará rodando na porta:
+    ```
+     http://localhost:8501/
+    ```
