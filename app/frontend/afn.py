@@ -1,51 +1,48 @@
 from typing import List, Dict
 from automatos import AutomatoABC
 
-class AFN(AutomatoABC):
 
-    def __init__(self, 
-        states: List[str], 
-        alphabet: List[str], 
-        initial_state: str, 
-        final_states: List[str], 
-        transitions: Dict[str, Dict[str, List[str]]]
-    ):
+class AFN(AutomatoABC):
+    def __init__(self,
+                 states: List[str],
+                 alphabet: List[str],
+                 initial_state: str,
+                 final_states: List[str],
+                 transitions: Dict[str, Dict[str, List[str]]]
+                 ):
         self.states = states
         self.alphabet = alphabet
         self.initial_state = initial_state
         self.final_states = final_states
         self.transitions = transitions
-        self.current_states = [initial_state]  # AFN pode estar em múltiplos estados ao mesmo tempo
+        # AFN pode estar em múltiplos estados ao mesmo tempo
+        self.current_states = [initial_state]
 
     def accepts(self, word):
         def _dfs(state, word):
             if not word:
                 return state in self.final_states
             symbol = word[0]
-            next_states = self.transitions.get((state, symbol), [])
+            next_states = self.transitions.get(state, {}).get(symbol, [])
             for next_state in next_states:
                 if _dfs(next_state, word[1:]):
                     return True
             return False
-        
+
         return _dfs(self.initial_state, word)
 
     def run(self, input_string: str) -> bool:
-        self.set_current_state([self.get_initial_state()])
+        self.current_states = [self.initial_state]
         for symbol in input_string:
-            self.set_current_transition({
-                'state': self.get_current_state(),
-                'symbol': symbol
-            })
             next_states = self.get_next_states(symbol)
             if not next_states:
                 return False  # Transição inválida
-            self.set_current_state(next_states)
-        return any(state in self.get_final_states() for state in self.get_current_state())
-    
+            self.current_states = next_states
+        return any(state in self.final_states for state in self.current_states)
+
     def get_next_states(self, symbol: str) -> List[str]:
         next_states = []
-        for state in self.get_current_state():
+        for state in self.current_states:
             next_states.extend(self.transitions.get(state, {}).get(symbol, []))
         return next_states
 
@@ -72,6 +69,3 @@ class AFN(AutomatoABC):
 
     def set_current_transition(self, transition: Dict[str, str]):
         self.current_transition = transition
-
-    
-

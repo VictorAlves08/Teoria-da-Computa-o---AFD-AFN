@@ -1,15 +1,15 @@
 from typing import List, Dict
 from automatos import AutomatoABC
 
-class AFD(AutomatoABC):
 
-    def __init__(self, 
-        states: List[str], 
-        alphabet: List[str], 
-        initial_state: str, 
-        final_states: List[str], 
-        transitions: Dict[str, Dict[str, str]]
-    ):
+class AFD(AutomatoABC):
+    def __init__(self,
+                 states: List[str],
+                 alphabet: List[str],
+                 initial_state: str,
+                 final_states: List[str],
+                 transitions: Dict[str, Dict[str, str]]
+                 ):
         self.states = states
         self.alphabet = alphabet
         self.initial_state = initial_state
@@ -20,28 +20,25 @@ class AFD(AutomatoABC):
     def accepts(self, word):
         current_state = self.initial_state
         for symbol in word:
-            if (current_state, symbol) in self.transitions:
-                current_state = self.transitions[(current_state, symbol)]
+            if symbol not in self.alphabet:
+                return False
+            if current_state in self.transitions and symbol in self.transitions[current_state]:
+                current_state = self.transitions[current_state][symbol]
             else:
                 return False
         return current_state in self.final_states
 
     def run(self, input_string: str) -> bool:
-        self.set_current_state(self.get_initial_state())
+        self.current_state = self.initial_state
         for symbol in input_string:
-            self.set_current_transition({
-                'state': self.get_current_state(),
-                'symbol': symbol
-            })
             next_state = self.get_next_states(symbol)
             if not next_state:
                 return False  # Transição inválida
-            self.set_current_state(next_state[0])  # AFD tem transições determinísticas
-        return self.get_current_state() in self.get_final_states()
-    
-    def get_next_states(self, symbol: str) -> List[str]:
-        next_state = self.transitions.get(self.get_current_state(), {}).get(symbol)
-        return [next_state] if next_state else []
+            self.current_state = next_state
+        return self.current_state in self.final_states
+
+    def get_next_states(self, symbol: str) -> str:
+        return self.transitions.get(self.current_state, {}).get(symbol, None)
 
     def get_transitions(self) -> Dict[str, Dict[str, str]]:
         return self.transitions

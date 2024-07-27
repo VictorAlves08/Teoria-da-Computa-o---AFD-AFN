@@ -4,6 +4,7 @@ from typing import List, Dict
 import graphviz
 from graphviz import Digraph
 
+
 def afn_to_afd(afn: AFN) -> AFD:
     new_states = []
     new_transitions = {}
@@ -29,7 +30,7 @@ def afn_to_afd(afn: AFN) -> AFD:
                 for state in current_state:
                     next_states.update(afn.get_next_states(state, symbol))
 
-                next_state_tuple = tuple(next_states)
+                next_state_tuple = tuple(sorted(next_states))
                 if next_state_tuple:
                     next_state_str = ','.join(next_state_tuple)
                     new_transitions[current_state_str][symbol] = next_state_str
@@ -38,14 +39,17 @@ def afn_to_afd(afn: AFN) -> AFD:
 
     return AFD(new_states, afn.get_alphabet(), ','.join(initial_state), final_states, new_transitions)
 
+
 def minimize_afd(afd: AFD) -> AFD:
-    P = [set(afd.get_final_states()), set(afd.get_states()) - set(afd.get_final_states())]
+    P = [set(afd.get_final_states()), set(
+        afd.get_states()) - set(afd.get_final_states())]
     W = [set(afd.get_final_states())]
 
     while W:
         A = W.pop()
         for c in afd.get_alphabet():
-            X = {q for q in afd.get_states() if afd.get_transitions().get(q, {}).get(c) in A}
+            X = {q for q in afd.get_states(
+            ) if afd.get_transitions().get(q, {}).get(c) in A}
             for Y in P:
                 inter = X & Y
                 diff = Y - X
@@ -62,75 +66,52 @@ def minimize_afd(afd: AFD) -> AFD:
                             W.append(inter)
                         else:
                             W.append(diff)
+
     new_states = []
     new_transitions = {}
     state_map = {}
     for group in P:
-        new_state = ','.join(group)
+        new_state = ','.join(sorted(group))
         new_states.append(new_state)
         state_map[new_state] = group
         for s in group:
             for c, t in afd.get_transitions().get(s, {}).items():
-                target_state = next((k for k, v in state_map.items() if t in v), None)
+                target_state = next(
+                    (k for k, v in state_map.items() if t in v), None)
                 if target_state:
                     if new_state not in new_transitions:
                         new_transitions[new_state] = {}
                     new_transitions[new_state][c] = target_state
 
-    initial_state = next((k for k, v in state_map.items() if afd.get_initial_state() in v), None)
-    final_states = [k for k, v in state_map.items() if set(v) & set(afd.get_final_states())]
-    
+    initial_state = next((k for k, v in state_map.items()
+                         if afd.get_initial_state() in v), None)
+    final_states = [k for k, v in state_map.items() if set(v) &
+                    set(afd.get_final_states())]
+
     return AFD(new_states, afd.get_alphabet(), initial_state, final_states, new_transitions)
 
+
 def afd_to_afn(afd: AFD) -> AFN:
+    """Converts a DFA to an equivalent NFA."""
     new_transitions = {}
     for state, transitions in afd.get_transitions().items():
-        new_transitions[state] = {symbol: [target] for symbol, target in transitions.items()}
+        new_transitions[state] = {symbol: [target]
+                                  for symbol, target in transitions.items()}
     return AFN(afd.get_states(), afd.get_alphabet(), afd.get_initial_state(), afd.get_final_states(), new_transitions)
 
-def render_automatonq(automaton):
-    dot = graphviz.Digraph(name="Automaton")
-    dot.attr(rankdir='LR', labelloc='t')
-
-    if isinstance(automaton, AFD):
-        dot.attr(label='Tipo: AFD')
-    else:
-        dot.attr(label='Tipo: AFN')
-
-    for state in automaton.get_states():
-        if state in automaton.get_final_states():
-            dot.node(state, shape='doublecircle')
-        else:
-            dot.node(state, shape='circle')
-    
-    dot.node('', shape='plaintext', label="")
-    dot.edge('', automaton.get_initial_state())
-
-    for state, transitions in automaton.get_transitions().items():
-        for symbol, targets in transitions.items():
-            if isinstance(targets, list):  # Handling AFN
-                for target in targets:
-                    dot.edge(state, target, label=symbol)
-            else:  # Handling AFD
-                dot.edge(state, transitions[symbol], label=symbol)
-
-    return dot
 
 def render_automato(automaton):
     dot = Digraph()
     dot.attr(rankdir='LR')
     dot.attr('node', shape='circle')
 
-    if isinstance(automaton, AFD):
-        dot.attr(label='Tipo: AFD')
-    else:
-        dot.attr(label='Tipo: AFN')
-
-    dot.node('->', shape='none', width='0', height='0', label='', fontcolor='blue')
-    dot.edge('->', automaton.get_initial_state())
+    dot.node('', shape='none', width='0',
+             height='0', label='', fontcolor='blue')
+    dot.edge('', automaton.get_initial_state())
 
     for state in automaton.get_final_states():
-        dot.node(state, shape='doublecircle', fontsize='19', fontcolor='red')
+        dot.node(state, shape='doublecircle')
+
     for state, transitions in automaton.get_transitions().items():
         for symbol, targets in transitions.items():
             if isinstance(targets, list):  # Handling AFN
@@ -141,21 +122,22 @@ def render_automato(automaton):
 
     return dot
 
+
 def check_equivalence(automaton1, automaton2, test_words: List[str]) -> bool:
     for word in test_words:
         if automaton1.run(word) != automaton2.run(word):
             return False
     return True
 
+
 def parse_transitions(transitions_input):
     transitions = {}
-    for line in transitions_input.split("\n"):
-        parts = line.split("=")
-        if len(parts) == 2:
-            state_symbol, result = parts[0].strip(), parts[1].strip()
-            state, symbol = state_symbol.split(',')
-            targets = result.split('|')
-            if state.strip() not in transitions:
-                transitions[state.strip()] = {}
-            transitions[state.strip()][symbol.strip()] = targets
+    for line in transitions_input.strip().split("\n"):
+        state_symbol, result = line.split("=")
+        state, symbol = state_symbol.strip().split(',')
+        targets = result.strip().split('|')
+        if state not in transitions:
+            transitions[state] = {}
+        transitions[state][symbol] = targets if len(
+            targets) > 1 else targets[0]
     return transitions
