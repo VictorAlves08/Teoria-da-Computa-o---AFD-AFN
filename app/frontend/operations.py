@@ -92,7 +92,6 @@ def minimize_afd(afd: AFD) -> AFD:
 
 
 def afd_to_afn(afd: AFD) -> AFN:
-    """Converts a DFA to an equivalent NFA."""
     new_transitions = {}
     for state, transitions in afd.get_transitions().items():
         new_transitions[state] = {symbol: [target]
@@ -105,9 +104,13 @@ def render_automato(automaton):
     dot.attr(rankdir='LR')
     dot.attr('node', shape='circle')
 
-    dot.node('', shape='none', width='0',
-             height='0', label='', fontcolor='blue')
-    dot.edge('', automaton.get_initial_state())
+    if isinstance(automaton, AFD):
+        dot.attr(label='Tipo: AFD')
+    else:
+        dot.attr(label='Tipo: AFN')
+
+    dot.node('start', shape='none', width='0', height='0', label='')
+    dot.edge('start', automaton.get_initial_state())
 
     for state in automaton.get_final_states():
         dot.node(state, shape='doublecircle')

@@ -21,11 +21,11 @@ class AFD(AutomatoABC):
         current_state = self.initial_state
         for symbol in word:
             if symbol not in self.alphabet:
-                return False
+                return False  # Símbolo não reconhecido
             if current_state in self.transitions and symbol in self.transitions[current_state]:
                 current_state = self.transitions[current_state][symbol]
             else:
-                return False
+                return False  # Transição inválida
         return current_state in self.final_states
 
     def run(self, input_string: str) -> bool:

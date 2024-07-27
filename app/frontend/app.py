@@ -318,7 +318,8 @@ elif choice == "Testar Palavra":
 
     if st.button("Testar"):
         transitions = parse_transitions(transitions_input)
-        is_afd = all(isinstance(v, str) for v in transitions.values())
+        is_afd = all(isinstance(v, str)
+                     for trans in transitions.values() for v in trans.values())
 
         if is_afd:
             automaton = AFD(states, alphabet, initial_state,
