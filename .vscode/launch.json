@@ -9,7 +9,8 @@
             "program": "/home/gabriel/anaconda3/envs/teoria/bin/streamlit", // Atualize conforme necessário
             "args": [
                 "run",
-                "/home/gabriel/Área de Trabalho/trabalho_teoria/app/frontend/app.py"
+                // "/home/gabriel/Área de Trabalho/trabalho_teoria/app/frontend/app.py"
+                "/home/gabriel/Área de Trabalho/Teoria_da_Computacao-AFD_AFN/app/frontend/app.py"
             ],
             "console": "integratedTerminal",
             "justMyCode": true

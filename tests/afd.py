@@ -1,5 +1,5 @@
 import unittest
-from app.backend.automatos.automato_finito import AutomatoFinito
+from app.backend.afd import AFD
 
 class TestAutomatoFinito(unittest.TestCase):
     def test_initialization(self):
@@ -8,7 +8,7 @@ class TestAutomatoFinito(unittest.TestCase):
         transicoes = {'q0': {'a': 'q1'}}
         estado_inicial = 'q0'
         estados_aceitacao = {'q1'}
-        automato = AutomatoFinito(estados, alfabeto, transicoes, estado_inicial, estados_aceitacao)
+        automato = AFD(estados, alfabeto, transicoes, estado_inicial, estados_aceitacao)
         self.assertEqual(automato.estados, estados)
         self.assertEqual(automato.alfabeto, alfabeto)
         self.assertEqual(automato.transicoes, transicoes)
