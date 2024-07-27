@@ -34,18 +34,18 @@ class AFN(AutomatoABC):
     def run(self, input_string: str) -> bool:
         self.current_states = [self.initial_state]
         for symbol in input_string:
-            next_states = self.get_next_states(symbol)
+            next_states = []
+            for state in self.current_states:
+                next_states.extend(self.get_next_states(state, symbol))
             if not next_states:
                 return False  # Transição inválida
             self.current_states = next_states
         return any(state in self.final_states for state in self.current_states)
 
-    def get_next_states(self, symbol: str) -> List[str]:
-        next_states = []
-        for state in self.current_states:
-            next_states.extend(self.transitions.get(state, {}).get(symbol, []))
-        return next_states
+    def get_next_states(self, state: str, symbol: str) -> List[str]:
+        return self.transitions.get(state, {}).get(symbol, [])
 
+    # Métodos de acesso às propriedades
     def get_transitions(self) -> Dict[str, Dict[str, List[str]]]:
         return self.transitions
 
