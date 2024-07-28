@@ -1,6 +1,5 @@
 from typing import List, Dict
-from automatos import AutomatoABC
-
+from app.backend.abstract.automatos import AutomatoABC
 
 class AFN(AutomatoABC):
     def __init__(self,
@@ -18,7 +17,7 @@ class AFN(AutomatoABC):
         # AFN pode estar em múltiplos estados ao mesmo tempo
         self.current_states = [initial_state]
 
-    def accepts(self, word):
+    def accepts(self, word: str) -> bool:
         def _dfs(state, word):
             if not word:
                 return state in self.final_states
@@ -30,7 +29,7 @@ class AFN(AutomatoABC):
             return False
 
         return _dfs(self.initial_state, word)
-
+    
     def run(self, input_string: str) -> bool:
         self.current_states = [self.initial_state]
         for symbol in input_string:

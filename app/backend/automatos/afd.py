@@ -1,6 +1,5 @@
 from typing import List, Dict
-from automatos import AutomatoABC
-
+from app.backend.abstract.automatos import AutomatoABC
 
 class AFD(AutomatoABC):
     def __init__(self,
@@ -17,7 +16,7 @@ class AFD(AutomatoABC):
         self.transitions = transitions
         self.current_state = initial_state
 
-    def accepts(self, word):
+    def accepts(self, word: str) -> bool:
         current_state = self.initial_state
         for symbol in word:
             if symbol not in self.alphabet:
