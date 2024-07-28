@@ -1,14 +1,14 @@
 from typing import List, Dict
 from app.backend.abstract.automatos import AutomatoABC
 
+
 class AFD(AutomatoABC):
     def __init__(self,
                  states: List[str],
                  alphabet: List[str],
                  initial_state: str,
                  final_states: List[str],
-                 transitions: Dict[str, Dict[str, str]]
-                 ):
+                 transitions: Dict[str, Dict[str, str]]):
         self.states = states
         self.alphabet = alphabet
         self.initial_state = initial_state

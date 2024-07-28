@@ -3,6 +3,7 @@ from app.backend.automatos.operations import Operations
 from app.backend.automatos.afn import AFN
 from app.backend.automatos.afd import AFD
 
+
 class AutomataApp:
     def __init__(self):
         self.operations = Operations()
@@ -46,7 +47,8 @@ class AutomataApp:
         states, alphabet, initial_state, final_states, transitions_input = self.input_fields()
         if st.button("Criar"):
             transitions = self.operations.parse_transitions(transitions_input)
-            automaton = AFD(states, alphabet, initial_state, final_states, transitions) if automaton_type == "AFD" else AFN(states, alphabet, initial_state, final_states, transitions)
+            automaton = AFD(states, alphabet, initial_state, final_states, transitions) if automaton_type == "AFD" else AFN(
+                states, alphabet, initial_state, final_states, transitions)
             self.render_and_display_automaton(automaton)
 
     def convert_afn_to_afd(self):
@@ -54,7 +56,8 @@ class AutomataApp:
         states, alphabet, initial_state, final_states, transitions_input = self.input_fields()
         if st.button("Converter"):
             transitions = self.operations.parse_transitions(transitions_input)
-            afn = AFN(states, alphabet, initial_state, final_states, transitions)
+            afn = AFN(states, alphabet, initial_state,
+                      final_states, transitions)
             afd = self.operations.afn_to_afd(afn)
             self.render_and_display_automaton(afd)
 
@@ -63,7 +66,8 @@ class AutomataApp:
         states, alphabet, initial_state, final_states, transitions_input = self.input_fields()
         if st.button("Minimizar"):
             transitions = self.operations.parse_transitions(transitions_input)
-            afd = AFD(states, alphabet, initial_state, final_states, transitions)
+            afd = AFD(states, alphabet, initial_state,
+                      final_states, transitions)
             minimized_afd = self.operations.minimize_afd(afd)
             self.render_and_display_automaton(minimized_afd)
 
@@ -71,39 +75,52 @@ class AutomataApp:
         st.write("## Verificar Equivalência")
 
         st.write("### Autômato 1")
-        states1, alphabet1, initial_state1, final_states1, transitions_input1 = self.input_fields("(Autômato 1)")
+        states1, alphabet1, initial_state1, final_states1, transitions_input1 = self.input_fields(
+            "(Autômato 1)")
 
         st.write("### Autômato 2")
-        states2, alphabet2, initial_state2, final_states2, transitions_input2 = self.input_fields("(Autômato 2)")
+        states2, alphabet2, initial_state2, final_states2, transitions_input2 = self.input_fields(
+            "(Autômato 2)")
 
         st.write("### Palavras de Teste")
-        test_words_input = st.text_area("Palavras de teste para verificação de equivalência (separadas por vírgulas)", value="a, ab, aab, aa")
+        test_words_input = st.text_area(
+            "Palavras de teste para verificação de equivalência (separadas por vírgulas)", value="a, ab, aab, aa")
 
         if st.button("Verificar"):
-            transitions1 = self.operations.parse_transitions(transitions_input1)
-            transitions2 = self.operations.parse_transitions(transitions_input2)
+            transitions1 = self.operations.parse_transitions(
+                transitions_input1)
+            transitions2 = self.operations.parse_transitions(
+                transitions_input2)
 
-            afn1 = AFN(states1, alphabet1, initial_state1, final_states1, transitions1)
-            afn2 = AFN(states2, alphabet2, initial_state2, final_states2, transitions2)
+            afn1 = AFN(states1, alphabet1, initial_state1,
+                       final_states1, transitions1)
+            afn2 = AFN(states2, alphabet2, initial_state2,
+                       final_states2, transitions2)
 
-            equivalent = self.operations.check_equivalence(afn1, afn2, test_words_input.split(","))
-            st.write(f"Os autômatos são {'equivalentes' if equivalent else 'não equivalentes'} para as palavras de teste fornecidas.")
+            equivalent = self.operations.check_equivalence(
+                afn1, afn2, test_words_input.split(","))
+            st.write(f"Os autômatos são {
+                     'equivalentes' if equivalent else 'não equivalentes'} para as palavras de teste fornecidas.")
 
     def test_words(self):
         st.write("## Testar Palavras")
         states, alphabet, initial_state, final_states, transitions_input = self.input_fields()
-        test_words_input = st.text_input("Palavras de teste (separadas por vírgulas)", value="a, ab, aab, aa")
+        test_words_input = st.text_input(
+            "Palavras de teste (separadas por vírgulas)", value="a, ab, aab, aa")
 
         if st.button("Testar"):
             transitions = self.operations.parse_transitions(transitions_input)
-            
+
             # Checa se todas as transições são para um único estado, indicando um AFD
-            is_afd = all(isinstance(v, str) for trans in transitions.values() for v in trans.values())
+            is_afd = all(isinstance(v, str)
+                         for trans in transitions.values() for v in trans.values())
 
             if is_afd:
-                automaton = AFD(states, alphabet, initial_state, final_states, transitions)
+                automaton = AFD(states, alphabet, initial_state,
+                                final_states, transitions)
             else:
-                automaton = AFN(states, alphabet, initial_state, final_states, transitions)
+                automaton = AFN(states, alphabet, initial_state,
+                                final_states, transitions)
 
             self.render_and_display_automaton(automaton)
 
@@ -112,7 +129,8 @@ class AutomataApp:
             results = {word: automaton.accepts(word) for word in test_words}
 
             for word, result in results.items():
-                st.write(f"A palavra '{word}' é {'aceita' if result else 'rejeitada'} pelo autômato.")
+                st.write(f"A palavra '{word}' é {
+                         'aceita' if result else 'rejeitada'} pelo autômato.")
 
     def render_and_display_automaton(self, automaton):
         dot = self.operations.render_automato(automaton)

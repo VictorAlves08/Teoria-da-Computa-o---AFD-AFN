@@ -74,6 +74,8 @@ class Operations:
             new_state = ','.join(sorted(group))
             new_states.append(new_state)
             state_map[new_state] = group
+
+        for new_state, group in state_map.items():
             for s in group:
                 for c, t in afd.get_transitions().get(s, {}).items():
                     target_state = next((k for k, v in state_map.items() if t in v), None)
