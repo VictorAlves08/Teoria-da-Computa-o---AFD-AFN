@@ -89,24 +89,6 @@ class AutomataApp:
             equivalent = self.operations.check_equivalence(afn1, afn2, test_words_input.split(","))
             st.write(f"Os autômatos são {'equivalentes' if equivalent else 'não equivalentes'} para as palavras de teste fornecidas.")
 
-    # def test_words(self):
-    #     st.write("## Testar Palavras")
-    #     states, alphabet, initial_state, final_states, transitions_input = self.input_fields()
-    #     test_words_input = st.text_input("Palavras de teste (separadas por vírgulas)", value="a, ab, aab, aa")
-
-    #     if st.button("Testar"):
-    #         transitions = self.operations.parse_transitions(transitions_input)
-    #         is_afd = all(isinstance(v, str) for trans in transitions.values() for v in trans.values())
-
-    #         automaton = AFD(states, alphabet, initial_state, final_states, transitions) if is_afd else AFN(states, alphabet, initial_state, final_states, transitions)
-    #         self.render_and_display_automaton(automaton)
-
-    #         test_words = [word.strip() for word in test_words_input.split(",")]
-    #         results = {word: automaton.accepts(word) for word in test_words}
-
-    #         for word, result in results.items():
-    #             st.write(f"A palavra '{word}' é {'aceita' if result else 'rejeitada'} pelo automato.")
-
     def test_words(self):
         st.write("## Testar Palavras")
         states, alphabet, initial_state, final_states, transitions_input = self.input_fields()
@@ -126,12 +108,6 @@ class AutomataApp:
             self.render_and_display_automaton(automaton)
 
             test_words = [word.strip() for word in test_words_input.split(",")]
-
-            # for word in test_words:
-            #     result = automaton.accepts(word)
-            #     print(automaton)
-            #     print(f"A palavra '{word}' é {'aceita' if result else 'rejeitada'} pelo AFD.")
-            #     st.write(f"A palavra '{word}' é {'aceita' if result else 'rejeitada'} pelo autômato.")
 
             results = {word: automaton.accepts(word) for word in test_words}
 
