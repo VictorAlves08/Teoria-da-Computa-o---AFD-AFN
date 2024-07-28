@@ -1,10 +1,10 @@
 # Projeto de Teoria da Computação
 
 Este projeto implementa um sistema para manipular Autômatos Finitos Determinísticos (AFD) e Autômatos Finitos Não-determinísticos (AFN).
-
+![demo_sin131](https://github.com/user-attachments/assets/f2efa14c-2d3e-4fa7-8e28-d4a5b00a319b)
 ## Funcionalidades
 
-- Recebe um AFN como entrada
+- Recebe um AFD ou AFN como entrada
 - Converte um AFN em AFD
 - Simula a aceitação de palavras no AFD e AFN
 - Demonstra a equivalência entre AFN e AFD
@@ -13,13 +13,12 @@ Este projeto implementa um sistema para manipular Autômatos Finitos Determinís
 ## Estrutura do Projeto
 
 - `app/`: Contém toda a lógica da aplicação.
-  - `app.py`: Arquivo principal da aplicação.
   - `backend/`: Lógica do backend.
-    - `automatos/`: Classes e funções dos autômatos.
-    - `scripts/`: Scripts executáveis.
-    - `tests/`: Testes unitários.
+    - `abstract/`
+    - `automatos/`
   - `frontend/`: Lógica do frontend.
-    - `app_streamlit.py`: Frontend usando Streamlit.
+    - `app.py`
+    - `automata_app.py`
 
 ## Como Executar
 
