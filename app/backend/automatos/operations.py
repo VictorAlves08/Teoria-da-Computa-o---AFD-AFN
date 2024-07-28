@@ -127,10 +127,10 @@ class Operations:
 
         for state, transitions in automaton.get_transitions().items():
             for symbol, targets in transitions.items():
-                if isinstance(targets, list):  # Handling AFN
+                if isinstance(targets, list):  # AFN
                     for target in targets:
                         dot.edge(state, target, label=symbol)
-                else:  # Handling AFD
+                else:  # AFD
                     dot.edge(state, targets, label=symbol)
 
         return dot

@@ -111,7 +111,7 @@ class AutomataApp:
         if st.button("Testar"):
             transitions = self.operations.parse_transitions(transitions_input)
 
-            # Checa se todas as transições são para um único estado, indicando um AFD
+            # Verifica se todas as transições são para um único estado (AFD)
             is_afd = all(isinstance(v, str)
                          for trans in transitions.values() for v in trans.values())
 

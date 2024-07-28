@@ -1,6 +1,7 @@
 from typing import List, Dict
 from app.backend.abstract.automatos import AutomatoABC
 
+
 class AFN(AutomatoABC):
     def __init__(self,
                  states: List[str],
@@ -29,7 +30,7 @@ class AFN(AutomatoABC):
             return False
 
         return _dfs(self.initial_state, word)
-    
+
     def run(self, input_string: str) -> bool:
         self.current_states = [self.initial_state]
         for symbol in input_string:
