@@ -1,42 +1,59 @@
-# Projeto de Teoria da Computação
+<div align="center">
+  <h1>Projeto de Teoria da Computação</h1>
+</div>
 
-Este projeto implementa um sistema para manipular Autômatos Finitos Determinísticos (AFD) e Autômatos Finitos Não-determinísticos (AFN).
+Este projeto implementa um sistema para manipular Autômatos Finitos Determinísticos (AFD) e Autômatos Finitos Não-determinísticos (AFN). Ele permite a conversão, simulação e minimização de autômatos, demonstrando a equivalência entre AFN e AFD.
 
-## Funcionalidades
+![Demonstração do Projeto](https://github.com/user-attachments/assets/f2efa14c-2d3e-4fa7-8e28-d4a5b00a319b)
 
-- Recebe um AFN como entrada
-- Converte um AFN em AFD
-- Simula a aceitação de palavras no AFD e AFN
-- Demonstra a equivalência entre AFN e AFD
-- Minimização de AFDs
+## ✨ Funcionalidades
 
-## Estrutura do Projeto
+- ✨ Recebe um AFD ou AFN como entrada
+- 🔄 Converte um AFN em AFD
+- 🎯 Simula a aceitação de palavras em AFDs e AFNs
+- 🔍 Demonstra a equivalência entre AFN e AFD
+- 🛠️ Minimização de AFDs para otimização
+
+## 🗂️ Estrutura do Projeto
 
 - `app/`: Contém toda a lógica da aplicação.
-  - `app.py`: Arquivo principal da aplicação.
   - `backend/`: Lógica do backend.
-    - `automatos/`: Classes e funções dos autômatos.
-    - `scripts/`: Scripts executáveis.
-    - `tests/`: Testes unitários.
-  - `frontend/`: Lógica do frontend.
-    - `app_streamlit.py`: Frontend usando Streamlit.
+    - `abstract/`: Abstrações e classes base.
+    - `automatos/`: Implementações dos autômatos.
+  - `frontend/`: Lógica do frontend e interface do usuário.
+    - `app.py`: Arquivo principal para execução da interface.
+    - `automata_app.py`: Lógica da aplicação de autômatos.
 
-## Como Executar
+## 🚀 Como Executar
 
 1. Instale as dependências:
-    ```
+    ```bash
     pip install -r requirements.txt
     ```
 
-2. Acesse o path do frontend:
-    ```
+2. Navegue até o diretório do frontend:
+    ```bash
     cd {seuPath}\app\frontend
     ```
-3. Execute o arquivo app.py:
-    ```
+
+3. Execute o arquivo `app.py`:
+    ```bash
     streamlit run app.py
     ```
-4. Seu projeto estará rodando na porta:
+
+4. Acesse a aplicação no seu navegador:
+    ```bash
+    http://localhost:8501/
     ```
-     http://localhost:8501/
-    ```
+
+## 🎓 Autores
+
+Este projeto foi desenvolvido como parte da disciplina de Teoria da Computação na Universidade Federal de Viçosa, campus Rio Paranaíba, por:
+
+- **Victor Oliveira**
+  - [LinkedIn](https://www.linkedin.com/in/victor-alves-de-oliveira/)
+  - [GitHub](https://github.com/VictorAlves08)
+
+- **Gabriel Mota**
+  - [LinkedIn](https://www.linkedin.com/in/gabriel-mota-a58899185/)
+  - [GitHub](https://github.com/gslmota)
