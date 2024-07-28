@@ -5,19 +5,24 @@ from typing import List, Dict, Set, Tuple, Union
 
 from graphviz import Digraph
 
+
 class Operations:
     @staticmethod
     def afn_to_afd(afn: AFN) -> AFD:
         new_states: List[str] = []
         new_transitions: Dict[str, Dict[str, str]] = {}
         state_map: Dict[str, Tuple[str, ...]] = {}
-        initial_state: Tuple[str, ...] = tuple([afn.get_initial_state()])
+        initial_state: Tuple[str, ...] = tuple(
+            sorted(set([afn.get_initial_state()])))
         state_queue: List[Tuple[str, ...]] = [initial_state]
         final_states: List[str] = []
 
+        def format_state(state_tuple):
+            return ','.join(sorted(state_tuple))
+
         while state_queue:
             current_state = state_queue.pop(0)
-            current_state_str = ','.join(current_state)
+            current_state_str = format_state(current_state)
 
             if current_state_str not in state_map:
                 state_map[current_state_str] = current_state
@@ -34,22 +39,25 @@ class Operations:
 
                     next_state_tuple = tuple(sorted(next_states))
                     if next_state_tuple:
-                        next_state_str = ','.join(next_state_tuple)
+                        next_state_str = format_state(next_state_tuple)
                         new_transitions[current_state_str][symbol] = next_state_str
                         if next_state_tuple not in state_map:
                             state_queue.append(next_state_tuple)
 
-        return AFD(new_states, afn.get_alphabet(), ','.join(initial_state), final_states, new_transitions)
+        initial_state_str = format_state(initial_state)
+        return AFD(new_states, afn.get_alphabet(), initial_state_str, final_states, new_transitions)
 
     @staticmethod
     def minimize_afd(afd: AFD) -> AFD:
-        P: List[Set[str]] = [set(afd.get_final_states()), set(afd.get_states()) - set(afd.get_final_states())]
+        P: List[Set[str]] = [set(afd.get_final_states()), set(
+            afd.get_states()) - set(afd.get_final_states())]
         W: List[Set[str]] = [set(afd.get_final_states())]
 
         while W:
             A = W.pop()
             for c in afd.get_alphabet():
-                X = {q for q in afd.get_states() if afd.get_transitions().get(q, {}).get(c) in A}
+                X = {q for q in afd.get_states(
+                ) if afd.get_transitions().get(q, {}).get(c) in A}
                 for Y in P:
                     inter = X & Y
                     diff = Y - X
@@ -78,14 +86,17 @@ class Operations:
         for new_state, group in state_map.items():
             for s in group:
                 for c, t in afd.get_transitions().get(s, {}).items():
-                    target_state = next((k for k, v in state_map.items() if t in v), None)
+                    target_state = next(
+                        (k for k, v in state_map.items() if t in v), None)
                     if target_state:
                         if new_state not in new_transitions:
                             new_transitions[new_state] = {}
                         new_transitions[new_state][c] = target_state
 
-        initial_state = next((k for k, v in state_map.items() if afd.get_initial_state() in v), None)
-        final_states = [k for k, v in state_map.items() if set(v) & set(afd.get_final_states())]
+        initial_state = next(
+            (k for k, v in state_map.items() if afd.get_initial_state() in v), None)
+        final_states = [k for k, v in state_map.items() if set(
+            v) & set(afd.get_final_states())]
 
         return AFD(new_states, afd.get_alphabet(), initial_state, final_states, new_transitions)
 
@@ -93,7 +104,8 @@ class Operations:
     def afd_to_afn(afd: AFD) -> AFN:
         new_transitions: Dict[str, Dict[str, List[str]]] = {}
         for state, transitions in afd.get_transitions().items():
-            new_transitions[state] = {symbol: [target] for symbol, target in transitions.items()}
+            new_transitions[state] = {symbol: [target]
+                                      for symbol, target in transitions.items()}
         return AFN(afd.get_states(), afd.get_alphabet(), afd.get_initial_state(), afd.get_final_states(), new_transitions)
 
     @staticmethod
@@ -139,5 +151,6 @@ class Operations:
             targets = result.strip().split('|')
             if state not in transitions:
                 transitions[state] = {}
-            transitions[state][symbol] = targets if len(targets) > 1 else targets[0]
+            transitions[state][symbol] = targets if len(
+                targets) > 1 else targets[0]
         return transitions
