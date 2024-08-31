@@ -1,6 +1,7 @@
 from typing import List, Dict, Union
 from abc import ABC, abstractmethod
 
+
 class AutomatoABC(ABC):
 
     @abstractmethod

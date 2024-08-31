@@ -1,5 +1,6 @@
 from typing import List, Dict, Tuple
 
+
 class TuringMachine:
     def __init__(self,
                  states: List[str],
@@ -32,7 +33,7 @@ class TuringMachine:
         current_symbol = self.tape[self.head_position]
         if current_symbol not in self.transitions[self.current_state]:
             return False
-        
+
         next_state, write_symbol, move = self.transitions[self.current_state][current_symbol]
         self.tape[self.head_position] = write_symbol
         self.current_state = next_state
