@@ -24,11 +24,14 @@ class AutomataApp:
         st.sidebar.write("`q0`")
         st.sidebar.write("### Estados Finais")
         st.sidebar.write("`q3,q4`")
-        st.sidebar.write("### Transições")
+        st.sidebar.write("### Transições AFD")
         st.sidebar.write(
-            "```\nq0,a=q1\nq0,b=q5\nq1,a=q3\nq1,b=q2\nq5,a=q5\nq5,b=q5\nq3,a=q3\nq3,b=q2\nq2,b=q5\nq2,a=q4\nq4,a=q3\nq4,b=q2```")
+            "```\nq0,a=q1\nq0,b=q5\nq1,a=q3\nq1,b=q2\nq5,a=q5\nq5,b=q5\nq3,a=q3\nq3,b=q2\nq2,b=q5\nq2,a=q4\nq4,a=q3\nq4,b=q2")
+        st.sidebar.write("### Transições AFN")
+        st.sidebar.write(
+            "```\nq0,a=q1\nq0,a=q2\nq0,b=q5\nq1,a=q3\nq1,b=q2\nq5,a=q5\nq5,b=q5\nq3,a=q3\nq3,b=q2\nq2,b=q5\nq2,a=q4\nq4,a=q3\nq4,b=q2\n```")
         st.sidebar.write("### Palavras de Teste")
-        st.sidebar.write("`a,b,ab,ba,aabb,bbaa`")
+        st.sidebar.write("`bab, ab, ba, aaa, aba, aaba`")
 
     def input_fields(self, label=""):
         states = st.text_input(
@@ -84,7 +87,7 @@ class AutomataApp:
 
         st.write("### Palavras de Teste")
         test_words_input = st.text_area(
-            "Palavras de teste para verificação de equivalência (separadas por vírgulas - sem espaços entre eles)", value="a,b,ab,ba,aabb,bbaa")
+            "Palavras de teste para verificação de equivalência (separadas por vírgulas)", value="bab, ab, ba, aaa, aba, aaba")
 
         if st.button("Verificar"):
             transitions1 = self.operations.parse_transitions(
@@ -106,7 +109,7 @@ class AutomataApp:
         st.write("## Testar Palavras")
         states, alphabet, initial_state, final_states, transitions_input = self.input_fields()
         test_words_input = st.text_input(
-            "Palavras de teste (separadas por vírgulas - sem espaços entre eles)", value="a,b,ab,ba,aabb,bbaa")
+            "Palavras de teste (separadas por vírgulas)", value="bab, ab, ba, aaa, aba, aaba")
 
         if st.button("Testar"):
             transitions = self.operations.parse_transitions(transitions_input)
