@@ -2,7 +2,7 @@
   <h1>Projeto de Teoria da Computação</h1>
 </div>
 
-Este projeto implementa um sistema para manipular Autômatos Finitos Determinísticos (AFD) e Autômatos Finitos Não-determinísticos (AFN). Ele permite a conversão, simulação e minimização de autômatos, demonstrando a equivalência entre AFN e AFD.
+Este projeto implementa um sistema para manipular Autômatos Finitos Determinísticos (AFD) e Autômatos Finitos Não-determinísticos (AFN). Ele permite a conversão, simulação e minimização de autômatos, demonstrando a equivalência entre AFN e AFD, assim como a manipulação de uma Máquina de Turing (MT), possibilitando a verificação de uma linguagem.
 
 ![Demonstração do Projeto](https://github.com/user-attachments/assets/f2efa14c-2d3e-4fa7-8e28-d4a5b00a319b)
 
@@ -13,6 +13,7 @@ Este projeto implementa um sistema para manipular Autômatos Finitos Determinís
 - 🎯 Simula a aceitação de palavras em AFDs e AFNs
 - 🔍 Demonstra a equivalência entre AFN e AFD
 - 🛠️ Minimização de AFDs para otimização
+- 🛠️ Reconhecimento de uma linguagem pela Máquina de Turing
 
 ## 🗂️ Estrutura do Projeto
 
