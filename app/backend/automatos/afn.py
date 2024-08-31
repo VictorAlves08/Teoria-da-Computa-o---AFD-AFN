@@ -15,7 +15,6 @@ class AFN(AutomatoABC):
         self.initial_state = initial_state
         self.final_states = final_states
         self.transitions = transitions
-        # AFN pode estar em múltiplos estados ao mesmo tempo
         self.current_states = [initial_state]
 
     def accepts(self, word: str) -> bool:
@@ -38,14 +37,13 @@ class AFN(AutomatoABC):
             for state in self.current_states:
                 next_states.extend(self.get_next_states(state, symbol))
             if not next_states:
-                return False  # Transição inválida
+                return False
             self.current_states = next_states
         return any(state in self.final_states for state in self.current_states)
 
     def get_next_states(self, state: str, symbol: str) -> List[str]:
         return self.transitions.get(state, {}).get(symbol, [])
 
-    # Métodos de acesso às propriedades
     def get_transitions(self) -> Dict[str, Dict[str, List[str]]]:
         return self.transitions
 

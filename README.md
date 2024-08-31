@@ -15,7 +15,7 @@ Este projeto implementa um sistema para manipular Autômatos Finitos Determinís
 - 🛠️ Minimização de AFDs para otimização
 - 📜 Reconhecimento de palavras pela Máquina de Turing
 
-## 🗂️ Estrutura do Projeto
+## 🗂️ Arquitetura do Projeto
 
 - `app/`: Contém toda a lógica da aplicação.
   - `backend/`: Lógica do backend.
