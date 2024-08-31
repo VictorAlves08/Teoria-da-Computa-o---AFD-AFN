@@ -135,7 +135,7 @@ class AutomataApp:
             for word, result in results.items():
                 st.write(f"A palavra '{word}' é {
                          'aceita' if result else 'rejeitada'} pelo autômato.")
-                
+
     def parse_turing_transitions(self, transitions_input: str) -> Dict[str, Dict[str, Tuple[str, str, str]]]:
         transitions = {}
         for line in transitions_input.strip().split("\n"):
@@ -150,13 +150,16 @@ class AutomataApp:
     def turing_machine(self):
         st.write("## Máquina de Turing - Testar Palavra")
 
-        # Inputs para configurar a Máquina de Turing
-        states = st.text_input("Estados (separados por vírgulas - sem espaços entre eles)", value="q0,q1,q2,qf").split(',')
-        alphabet = st.text_input("Alfabeto da fita (separados por vírgulas - sem espaços entre eles)", value="0,1").split(',')
-        tape_alphabet = st.text_input("Alfabeto da fita incluindo o símbolo branco (separados por vírgulas)", value="0,1,_").split(',')
+        states = st.text_input(
+            "Estados (separados por vírgulas - sem espaços entre eles)", value="q0,q1,q2,qf").split(',')
+        alphabet = st.text_input(
+            "Alfabeto da fita (separados por vírgulas - sem espaços entre eles)", value="0,1").split(',')
+        tape_alphabet = st.text_input(
+            "Alfabeto da fita incluindo o símbolo branco (separados por vírgulas)", value="0,1,_").split(',')
         blank_symbol = st.text_input("Símbolo Branco", value="_")
         initial_state = st.text_input("Estado Inicial", value="q0")
-        final_states = st.text_input("Estados Finais (separados por vírgulas - sem espaços entre eles)", value="qf").split(',')
+        final_states = st.text_input(
+            "Estados Finais (separados por vírgulas - sem espaços entre eles)", value="qf").split(',')
         transitions_input = st.text_area(
             "Transições (um por linha, formato: estado,símbolo=(próximo estado,símbolo escrito,direção (L/R)) - sem espaços entre eles)",
             value="q0,0=(q1,1,R)\nq1,1=(q2,0,R)\nq2,_=(qf,_,R)")
@@ -165,33 +168,11 @@ class AutomataApp:
 
         if st.button("Testar Máquina de Turing"):
             transitions = self.parse_turing_transitions(transitions_input)
-            tm = TuringMachine(states, alphabet, tape_alphabet, blank_symbol, initial_state, final_states, transitions)
+            tm = TuringMachine(states, alphabet, tape_alphabet,
+                               blank_symbol, initial_state, final_states, transitions)
             result = tm.run(input_string)
-            st.write(f"A palavra '{input_string}' é {'aceita' if result else 'rejeitada'} pela Máquina de Turing.")
-
-    # def turing_machine(self):
-    #     st.write("## Máquina de Turing - Testar Palavra")
-
-    #     # Inputs para configurar a Máquina de Turing
-    #     states = st.text_input("Estados (separados por vírgulas - sem espaços entre eles)", value="q0,q1,q2,qf").split(',')
-    #     alphabet = st.text_input("Alfabeto da fita (separados por vírgulas - sem espaços entre eles)", value="0,1").split(',')
-    #     tape_alphabet = st.text_input("Alfabeto da fita incluindo o símbolo branco (separados por vírgulas)", value="0,1,_").split(',')
-    #     blank_symbol = st.text_input("Símbolo Branco", value="_")
-    #     initial_state = st.text_input("Estado Inicial", value="q0")
-    #     final_states = st.text_input("Estados Finais (separados por vírgulas - sem espaços entre eles)", value="qf").split(',')
-    #     transitions_input = st.text_area(
-    #         "Transições (um por linha, formato: estado,símbolo=(próximo estado,símbolo escrito,direção (L/R)) - sem espaços entre eles)",
-    #         value="q0,0=(q1,1,R)\nq1,1=(q2,0,R)\nq2,_=(qf,_,R)")
-
-    #     input_string = st.text_input("Palavra de entrada", value="001")
-
-    #     if st.button("Testar Máquina de Turing"):
-    #         transitions = TuringMachine.parse_transitions(transitions_input)
-    #         tm = TuringMachine(states, alphabet, tape_alphabet, blank_symbol, initial_state, final_states, transitions)
-    #         result = tm.run(input_string)
-    #         st.write(f"A palavra '{input_string}' é {'aceita' if result else 'rejeitada'} pela Máquina de Turing.")
-
-
+            st.write(f"A palavra '{input_string}' é {
+                     'aceita' if result else 'rejeitada'} pela Máquina de Turing.")
 
     def render_and_display_automaton(self, automaton):
         dot = self.operations.render_automato(automaton)
