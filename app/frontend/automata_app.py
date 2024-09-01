@@ -59,11 +59,14 @@ class AutomataApp:
     def convert_afn_to_afd(self):
         st.write("## Converter AFN para AFD")
         states, alphabet, initial_state, final_states, transitions_input = self.input_fields()
+
         if st.button("Converter"):
-            transitions = self.operations.parse_transitions(transitions_input)
+            operations = Operations()
+            transitions = operations.parse_transitions(transitions_input)
             afn = AFN(states, alphabet, initial_state,
                       final_states, transitions)
-            afd = self.operations.afn_to_afd(afn)
+            afd = operations.afn_to_afd(afn)
+
             self.render_and_display_automaton(afd)
 
     def minimize_afd(self):

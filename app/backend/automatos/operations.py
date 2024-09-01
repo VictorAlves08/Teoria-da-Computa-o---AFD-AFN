@@ -1,51 +1,76 @@
 from app.backend.automatos.afn import AFN
 from app.backend.automatos.afd import AFD
 
-from typing import List, Dict, Set, Tuple, Union
-
+from typing import List, Dict, Set, Set, FrozenSet, Union
 from graphviz import Digraph
 
 
 class Operations:
     @staticmethod
     def afn_to_afd(afn: AFN) -> AFD:
-        new_states: List[str] = []
-        new_transitions: Dict[str, Dict[str, str]] = {}
-        state_map: Dict[str, Tuple[str, ...]] = {}
-        initial_state: Tuple[str, ...] = tuple(
-            sorted(set([afn.get_initial_state()])))
-        state_queue: List[Tuple[str, ...]] = [initial_state]
-        final_states: List[str] = []
+        def epsilon_closure(states: Set[str]) -> FrozenSet[str]:
+            closure = set(states)
+            queue = list(states)
 
-        def format_state(state_tuple):
-            return ','.join(sorted(state_tuple))
+            while queue:
+                current_state = queue.pop()
+                for origin, transitions in afn.get_transitions().items():
+                    if origin == current_state:
+                        for symbol, destinations in transitions.items():
+                            if symbol == 'e':
+                                for destination in destinations if isinstance(destinations, list) else [destinations]:
+                                    if destination not in closure:
+                                        closure.add(destination)
+                                        queue.append(destination)
 
-        while state_queue:
-            current_state = state_queue.pop(0)
-            current_state_str = format_state(current_state)
+            return frozenset(closure)
 
-            if current_state_str not in state_map:
-                state_map[current_state_str] = current_state
-                new_states.append(current_state_str)
-                new_transitions[current_state_str] = {}
+        afd_transitions = []
+        state_mapping = {}
+        new_states = [epsilon_closure({afn.get_initial_state()})]
+        state_mapping[new_states[0]] = "S0"
 
-                if any(s in afn.get_final_states() for s in current_state):
-                    final_states.append(current_state_str)
+        while new_states:
+            current_state = new_states.pop()
 
-                for symbol in afn.get_alphabet():
-                    next_states: Set[str] = set()
-                    for state in current_state:
-                        next_states.update(afn.get_next_states(state, symbol))
+            for symbol in afn.get_alphabet():
+                next_state = set()
 
-                    next_state_tuple = tuple(sorted(next_states))
-                    if next_state_tuple:
-                        next_state_str = format_state(next_state_tuple)
-                        new_transitions[current_state_str][symbol] = next_state_str
-                        if next_state_tuple not in state_map:
-                            state_queue.append(next_state_tuple)
+                for state in current_state:
+                    for origin, transitions in afn.get_transitions().items():
+                        if origin == state:
+                            for label, destinations in transitions.items():
+                                if label == symbol:
+                                    next_state.update(destinations if isinstance(
+                                        destinations, list) else [destinations])
 
-        initial_state_str = format_state(initial_state)
-        return AFD(new_states, afn.get_alphabet(), initial_state_str, final_states, new_transitions)
+                if next_state:
+                    next_state_closure = epsilon_closure(next_state)
+                    if next_state_closure not in state_mapping:
+                        new_state_name = f"S{len(state_mapping)}"
+                        state_mapping[next_state_closure] = new_state_name
+                        new_states.append(next_state_closure)
+
+                    afd_transitions.append(
+                        [state_mapping[current_state], symbol,
+                            state_mapping[next_state_closure]]
+                    )
+
+        afd_states = list(state_mapping.values())
+        afd_initial_state = state_mapping[epsilon_closure(
+            {afn.get_initial_state()})]
+        afd_final_states = {
+            state_mapping[state] for state in state_mapping if state & set(afn.get_final_states())
+        }
+
+        afd_transitions_dict = {}
+        for transition in afd_transitions:
+            origin, symbol, destination = transition
+            if origin not in afd_transitions_dict:
+                afd_transitions_dict[origin] = {}
+            afd_transitions_dict[origin][symbol] = destination
+
+        return AFD(afd_states, afn.get_alphabet(), afd_initial_state, list(afd_final_states), afd_transitions_dict)
 
     @staticmethod
     def minimize_afd(afd: AFD) -> AFD:
