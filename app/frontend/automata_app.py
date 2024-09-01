@@ -157,8 +157,6 @@ class AutomataApp:
             "Estados (separados por vírgulas - sem espaços entre eles)", value="q0,q1,q2,qf").split(',')
         alphabet = st.text_input(
             "Alfabeto da fita (separados por vírgulas - sem espaços entre eles)", value="0,1").split(',')
-        tape_alphabet = st.text_input(
-            "Alfabeto da fita incluindo o símbolo branco (separados por vírgulas)", value="0,1,_").split(',')
         blank_symbol = st.text_input("Símbolo Branco", value="_")
         initial_state = st.text_input("Estado Inicial", value="q0")
         final_states = st.text_input(
@@ -171,7 +169,7 @@ class AutomataApp:
 
         if st.button("Testar Máquina de Turing"):
             transitions = self.parse_turing_transitions(transitions_input)
-            tm = TuringMachine(states, alphabet, tape_alphabet,
+            tm = TuringMachine(states, alphabet,
                                blank_symbol, initial_state, final_states, transitions)
             result = tm.run(input_string)
             st.write(f"A palavra '{input_string}' é {

@@ -5,14 +5,12 @@ class TuringMachine:
     def __init__(self,
                  states: List[str],
                  alphabet: List[str],
-                 tape_alphabet: List[str],
                  blank_symbol: str,
                  initial_state: str,
                  final_states: List[str],
                  transitions: Dict[str, Dict[str, Tuple[str, str, str]]]):
         self.states = states
         self.alphabet = alphabet
-        self.tape_alphabet = tape_alphabet
         self.blank_symbol = blank_symbol
         self.initial_state = initial_state
         self.final_states = final_states
