@@ -21,9 +21,11 @@ Este projeto implementa um sistema para manipular Autômatos Finitos Determinís
   - `backend/`: Lógica do backend.
     - `abstract/`: Abstrações e classes base.
     - `automatos/`: Implementações dos autômatos.
+    - `turing_machine/`: Implementação da máquina de turing
   - `frontend/`: Lógica do frontend e interface do usuário.
     - `app.py`: Arquivo principal para execução da interface.
     - `automata_app.py`: Lógica da aplicação de autômatos.
+- `utils/`: Arquivos Utilitários
 
 ## 🚀 Como Executar
 
@@ -49,7 +51,7 @@ Este projeto implementa um sistema para manipular Autômatos Finitos Determinís
 
 ## 🎓 Autores
 
-Este projeto foi desenvolvido como parte da disciplina de Teoria da Computação na Universidade Federal de Viçosa, campus Rio Paranaíba, por:
+Este projeto foi desenvolvido como parte da disciplina de Teoria da Computação pela Universidade Federal de Viçosa, campus Rio Paranaíba, por:
 
 - **Victor Oliveira**
   - [LinkedIn](https://www.linkedin.com/in/victor-alves-de-oliveira/)
