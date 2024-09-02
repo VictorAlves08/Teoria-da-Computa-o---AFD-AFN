@@ -11,7 +11,7 @@ class AutomataApp:
         self.operations = Operations()
         st.title("Projeto de Autômatos Teoria da Computação 🚀")
         self.menu = ["Home", "Criar AFD", "Criar AFN", "Converter AFN para AFD",
-                     "Minimizar AFD", "Verificar Equivalência", "Testar Palavras", "Máquina de Turing - Palíndromos", "Máquina de Turing - Balanceamento de Parênteses"]
+                     "Minimizar AFD", "Verificar Equivalência", "Testar Palavras", "Máquina de Turing - Palíndromos", "Máquina de Turing - Cópia de Cadeia de Caracteres"]
         self.choice = st.sidebar.selectbox("Escolha a operação", self.menu)
         self.show_examples()
         self.route()
@@ -179,33 +179,48 @@ class AutomataApp:
             st.write(f"A palavra '{input_string}' {
                      'é um palíndromo' if result else 'não é palíndromo'} pela Máquina de Turing.")
 
-    def parenthesis_turing_machine(self):
-        st.write(
-            "## Máquina de Turing - Verificação de Balanceamento de Parênteses")
+    def copy_string_turing_machine(self):
+        st.write("## Máquina de Turing - Cópia de Cadeia de Caracteres")
 
         states = st.text_input(
-            "Estados (separados por vírgulas - sem espaços entre eles)", value="q0,q1,q5,q6").split(',')
+            "Estados (separados por vírgulas - sem espaços entre eles)",
+            value="q0,q1,q2,qf"
+        ).split(',')
+
         alphabet = st.text_input(
-            "Alfabeto da fita (separados por vírgulas - sem espaços entre eles)", value="(,)").split(',')
+            "Alfabeto da fita (separados por vírgulas - sem espaços entre eles)",
+            value="a,b"
+        ).split(',')
+
         blank_symbol = st.text_input("Símbolo Branco", value="_")
         initial_state = st.text_input("Estado Inicial", value="q0")
+
         final_states = st.text_input(
-            "Estados Finais (separados por vírgulas - sem espaços entre eles)", value="q5").split(',')
+            "Estados Finais (separados por vírgulas - sem espaços entre eles)",
+            value="qf"
+        ).split(',')
+
         transitions_input = st.text_area(
             "Transições (um por linha, formato: estado,símbolo=(próximo estado,símbolo escrito,direção (L/R)) - sem espaços entre eles)",
-            value="q0,0=(q0,0,R)\nq0,1=(q1,1,R)\n"
-            "q1,0=(q1,0,R)\nq1,1=(q1,1,R)\n"
-            "q1,_=(q5,_,R)\nq0,_=(q6,_,R)")
+            value=(
+                "q0,a=(q1,_,R)\n"
+                "q1,_=(q2,a,L)\n"
+                "q2,=(q0,_,R)\n"
+                "q0,_=(qf,_,R)\n"
+                "q1,b=(q1,b,R)\n"
+                "q2,b=(q0,b,L)\n"
+            )
+        )
 
-        input_string = st.text_input("Palavra de entrada", value="(()())")
+        input_string = st.text_input("Palavra de entrada", value="ab")
 
         if st.button("Testar Máquina de Turing"):
             transitions = self.parse_turing_transitions(transitions_input)
-            tm = TuringMachine(states, alphabet,
-                               blank_symbol, initial_state, final_states, transitions)
+            tm = TuringMachine(states, alphabet, blank_symbol,
+                               initial_state, final_states, transitions)
             result = tm.run(input_string)
-            st.write(f"A palavra '{input_string}' {
-                     'está balanceada' if result else 'não está balanceada'} pela Máquina de Turing.")
+            st.write(f"A palavra '{input_string}' foi {
+                     'copiada' if result else 'não copiada'} pela Máquina de Turing.")
 
     def render_and_display_automaton(self, automaton):
         dot = self.operations.render_automato(automaton)
@@ -228,5 +243,5 @@ class AutomataApp:
             self.test_words()
         elif self.choice == "Máquina de Turing - Palíndromos":
             self.palindrome_turing_machine()
-        elif self.choice == "Máquina de Turing - Balanceamento de Parênteses":
-            self.parenthesis_turing_machine()
+        elif self.choice == "Máquina de Turing - Cópia de Cadeia de Caracteres":
+            self.copy_string_turing_machine()
